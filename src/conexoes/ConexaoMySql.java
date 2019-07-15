@@ -23,7 +23,7 @@ public class ConexaoMySql {
 
 
     private String servidor = "localhost";
-    private String nomeDoBanco = "dbvendasbl";
+    private String nomeDoBanco = "projetodesoftware";
     private String usuario = "root";
     private String senha = "";
     
