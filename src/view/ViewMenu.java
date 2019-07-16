@@ -5,6 +5,10 @@
  */
 package view;
 
+import view.Cliente.ViewCliente;
+import view.Produto.ViewProduto;
+import view.Usuario.ViewUsuario;
+
 /**
  *
  * @author LUAN
@@ -18,6 +22,7 @@ public class ViewMenu extends javax.swing.JFrame {
         initComponents();
         this.setTitle("MENU");
         this.setResizable(false);
+        this.setFocusable(true);
         this.setLocationRelativeTo(null);
     }
 
@@ -31,49 +36,74 @@ public class ViewMenu extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jb_Clientes = new javax.swing.JButton();
+        jb_Usuarios = new javax.swing.JButton();
+        jb_Produtos = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        jb_Voltar = new javax.swing.JButton();
+        jb_Sair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
-        jButton1.setBackground(new java.awt.Color(255, 102, 102));
-        jButton1.setFont(new java.awt.Font("Arial Black", 1, 11)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Cliente");
-
-        jButton2.setBackground(new java.awt.Color(255, 102, 102));
-        jButton2.setFont(new java.awt.Font("Arial Black", 1, 11)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Usuario");
-
-        jButton3.setBackground(new java.awt.Color(255, 102, 102));
-        jButton3.setFont(new java.awt.Font("Arial Black", 1, 11)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Produto");
-
-        jButton4.setBackground(new java.awt.Color(255, 102, 102));
-        jButton4.setFont(new java.awt.Font("Arial Black", 1, 11)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Venda");
-
-        jButton5.setBackground(new java.awt.Color(255, 255, 255));
-        jButton5.setFont(new java.awt.Font("Arial Black", 1, 11)); // NOI18N
-        jButton5.setText("Voltar");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        jb_Clientes.setBackground(new java.awt.Color(255, 102, 102));
+        jb_Clientes.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jb_Clientes.setForeground(new java.awt.Color(255, 255, 255));
+        jb_Clientes.setText("Clientes");
+        jb_Clientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                jb_ClientesActionPerformed(evt);
             }
         });
 
-        jButton6.setBackground(new java.awt.Color(255, 255, 255));
-        jButton6.setFont(new java.awt.Font("Arial Black", 1, 11)); // NOI18N
-        jButton6.setText("Sair");
+        jb_Usuarios.setBackground(new java.awt.Color(255, 102, 102));
+        jb_Usuarios.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jb_Usuarios.setForeground(new java.awt.Color(255, 255, 255));
+        jb_Usuarios.setText("Usuarios");
+        jb_Usuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_UsuariosActionPerformed(evt);
+            }
+        });
+
+        jb_Produtos.setBackground(new java.awt.Color(255, 102, 102));
+        jb_Produtos.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jb_Produtos.setForeground(new java.awt.Color(255, 255, 255));
+        jb_Produtos.setText("Produtos");
+        jb_Produtos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_ProdutosActionPerformed(evt);
+            }
+        });
+
+        jButton4.setBackground(new java.awt.Color(255, 102, 102));
+        jButton4.setFont(new java.awt.Font("Arial Black", 1, 14)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jButton4.setText("Vendas");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jb_Voltar.setBackground(new java.awt.Color(255, 255, 255));
+        jb_Voltar.setFont(new java.awt.Font("Arial Black", 1, 11)); // NOI18N
+        jb_Voltar.setText("Voltar");
+        jb_Voltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_VoltarActionPerformed(evt);
+            }
+        });
+
+        jb_Sair.setBackground(new java.awt.Color(255, 255, 255));
+        jb_Sair.setFont(new java.awt.Font("Arial Black", 1, 11)); // NOI18N
+        jb_Sair.setText("Sair");
+        jb_Sair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jb_SairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -81,17 +111,17 @@ public class ViewMenu extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jb_Clientes, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jb_Usuarios)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jb_Produtos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addComponent(jb_Voltar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jb_Sair, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
         );
         jPanel1Layout.setVerticalGroup(
@@ -99,11 +129,11 @@ public class ViewMenu extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jb_Usuarios, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                    .addComponent(jb_Sair, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jb_Voltar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jb_Clientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jb_Produtos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -122,9 +152,39 @@ public class ViewMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jb_VoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_VoltarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+        new ViewLogin().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jb_VoltarActionPerformed
+
+    private void jb_SairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_SairActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jb_SairActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jb_ProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_ProdutosActionPerformed
+        // TODO add your handling code here:
+        new ViewProduto().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jb_ProdutosActionPerformed
+
+    private void jb_UsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_UsuariosActionPerformed
+        // TODO add your handling code here:
+        new ViewUsuario().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jb_UsuariosActionPerformed
+
+    private void jb_ClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_ClientesActionPerformed
+        // TODO add your handling code here:
+        new ViewCliente().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jb_ClientesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -162,12 +222,12 @@ public class ViewMenu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton jb_Clientes;
+    private javax.swing.JButton jb_Produtos;
+    private javax.swing.JButton jb_Sair;
+    private javax.swing.JButton jb_Usuarios;
+    private javax.swing.JButton jb_Voltar;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,200 +3,234 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.Produto;
+package view.Usuario;
 
-import controller.ControlerProdutos;
+import controller.ControllerUsuario;
 import java.awt.Color;
-import java.awt.HeadlessException;
 import java.util.ArrayList;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.table.DefaultTableModel;
-import model.ModelProdutos;
+import model.ModelUsuario;
 import view.ViewMenu;
 
 /**
  *
  * @author LUAN
  */
-public class ViewProduto extends javax.swing.JFrame {
+public class ViewUsuario extends javax.swing.JFrame {
 
-    ArrayList<ModelProdutos> listaModelProduto = new ArrayList<>();
-    ControlerProdutos controllerProdutos = new ControlerProdutos();
-    ModelProdutos modelProduto = new ModelProdutos();
+    ArrayList<ModelUsuario> listaModelUsuario = new ArrayList<>();
+    ControllerUsuario controllerUsuario = new ControllerUsuario();
+    ModelUsuario modelUsuario = new ModelUsuario();
 
     /**
-     * Creates new form ViewCliente
+     * Creates new form ViewUsuario
      */
-    public ViewProduto() {
+    public ViewUsuario() {
         initComponents();
         jScrollPane1.getViewport().setBackground(Color.WHITE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.setTitle("Produto");
+        this.setTitle("Usuario");
         atualizarTabela();
     }
 
-    //preenche a tabela com os produtos cadastrados no banco
     private void atualizarTabela() {
-        listaModelProduto = controllerProdutos.retornarListaProdutoController();
+        listaModelUsuario = controllerUsuario.getListaUsuarioController();
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
         modelo.setNumRows(0);
-        listaModelProduto.forEach((m) -> {
+        listaModelUsuario.forEach((m) -> {
             modelo.addRow(new Object[]{
-                m.getIdProduto(),
-                m.getProNome(),
-                m.getProValor(),
-                m.getProEstoque()
+                m.getIdUsuario(),
+                m.getUsuNome(),
+                m.getUsuLogin()
             });
         });
     }
 
-    private void novoProduto() {
-        String nome, valor, qnt;
-        nome = valor = qnt = "";
-        int confirmacao;
+    private boolean verificaSenha() {
+        String[] options = new String[]{"Confirmar", "Cancelar"};
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Senha:");
 
+        JPasswordField pass = new JPasswordField(20);
+
+        panel.add(label);
+        panel.add(pass);
+
+        String s;
+        int option;
         do {
-            nome = JOptionPane.showInputDialog("Nome do produto", nome);
-            if (nome == null) {
-                return;
+            option = JOptionPane.showOptionDialog(null, panel, "Senha Antiga",
+                    JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    null, options, options[1]);
+            if (option == 1) {
+                break;
             }
-            valor = JOptionPane.showInputDialog("Valor", valor);
-            if (valor == null) {
-                return;
-            }
-            qnt = JOptionPane.showInputDialog("Quantidade", qnt);
-            if (qnt == null) {
-                return;
-            }
+            char[] password = pass.getPassword();
+            s = new String(password);
 
-            Object[] options = {"Confirmar", "Inicio", "Cancelar"};
-            confirmacao = JOptionPane.showOptionDialog(null, "Nome: " + nome + '\n'
-                    + "Valor: " + valor + '\n'
-                    + "Quantidade: " + qnt,
-                    "Novo Produto", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[1]);
-
-        } while (confirmacao == 1);
-
-        if (confirmacao == 0) {
-            try {
-                modelProduto.setProNome(nome);
-                modelProduto.setProEstoque(Integer.parseInt(qnt));
-                modelProduto.setProValor(Double.parseDouble(valor));
-                if (controllerProdutos.salvarProdutoController(modelProduto) > 0) {
-                    atualizarTabela();
-                    JOptionPane.showMessageDialog(this, "Cadastro Realizado!");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao tentar Cadastrar Produto.");
-                }
-            } catch (HeadlessException | NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Dados invalidos!");
-            }
-
-        }
-    }
-
-    private void excluirProduto() {
-        int linha = jTable1.getSelectedRow();
-        if (linha != -1) {
-            int codigoProduto = (int) jTable1.getValueAt(linha, 0);
-            Object[] options = {"Confirmar", "Cancelar"};
-            if (JOptionPane.showOptionDialog(null, "Cofirmar exclusão", "Excluir", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]) == 0) {
-                if (controllerProdutos.excluirProdutoController(codigoProduto)) {
-                    atualizarTabela();
-                    JOptionPane.showMessageDialog(this, "Excluido com sucesso.");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Produto não excluido.", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione um produto", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void alterarProduto() {
-        String nome, valor, qnt;
-
-        int linha = jTable1.getSelectedRow();
-        if (linha != -1) {
-            int confirmacao;
-            do {
-                nome = JOptionPane.showInputDialog("Nome do produto", jTable1.getValueAt(linha, 1));
-                if (nome == null) {
-                    return;
-                }
-                valor = JOptionPane.showInputDialog("Valor", jTable1.getValueAt(linha, 2));
-                if (valor == null) {
-                    return;
-                }
-                qnt = JOptionPane.showInputDialog("Quantidade", jTable1.getValueAt(linha, 3));
-                if (qnt == null) {
-                    return;
-                }
-
-                Object[] options = {"Confirmar", "Inicio", "Cancelar"};
-                confirmacao = JOptionPane.showOptionDialog(null, "Nome: " + "[" + jTable1.getValueAt(linha, 1) + "] para [" + nome + "]" + '\n'
-                        + "Valor: " + "[" + jTable1.getValueAt(linha, 2) + "] para [" + valor + "]" + '\n'
-                        + "Quantidade: " + "[" + jTable1.getValueAt(linha, 3) + "] para [" + qnt + "]",
-                        "Alterar", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[2]);
-
-            } while (confirmacao == 1);
-
-            if (confirmacao == 0) {
-                try {
-                    modelProduto.setProNome(nome);
-                    modelProduto.setProEstoque(Integer.parseInt(qnt));
-                    modelProduto.setProValor(Double.parseDouble(valor));
-                    modelProduto.setIdProduto((int) jTable1.getValueAt(linha, 0));
-
-                    if (controllerProdutos.alterarProdutoController(modelProduto)) {
-                        atualizarTabela();
-                        JOptionPane.showMessageDialog(this, "Alteração Realizada!");
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Erro ao tentar Alterar Produto.");
-                    }
-                } catch (HeadlessException | NumberFormatException e) {
-                    JOptionPane.showMessageDialog(null, "Produto não alterado. Dados invalidos.", "Erro", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione um produto", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-
-    }
-
-    private void detalhesProduto() {
-        int linha = jTable1.getSelectedRow();
-        if (linha != -1) {
-            ModelProdutos produto = controllerProdutos.retornarProdutoController((int) jTable1.getValueAt(linha, 0));
-            if (produto != null) {
-                JOptionPane.showMessageDialog(this, produto.getProNome()
-                        + "\n" + produto.getProValor()
-                        + "\n" + produto.getProEstoque(), "Detalhes", JOptionPane.INFORMATION_MESSAGE);
+            if (!s.equals(modelUsuario.getUsuSenha())) {
+                JOptionPane.showMessageDialog(null, "Senha incorreta.", "Erro", JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "Erro na conexão.", "Erro", JOptionPane.ERROR_MESSAGE);
+                break;
+            }
+            pass.setText("");
+        } while (true);
+        return (option == 0);
+    }
+
+    private String criarSenha() {
+        String[] options = new String[]{"Confirmar", "Cancelar"};
+        JPanel panel = new JPanel();
+        JLabel label = new JLabel("Senha:");
+        JLabel labelConfirmar = new JLabel("Confirmar:");
+
+        JPasswordField pass = new JPasswordField(20);
+        JPasswordField passConfirmar = new JPasswordField(20);
+
+        panel.add(label);
+        panel.add(passConfirmar);
+        panel.add(labelConfirmar);
+        panel.add(pass);
+
+        String s, sC = "";
+        int option;
+        do {
+            option = JOptionPane.showOptionDialog(null, panel, "Senha",
+                    JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+                    null, options, options[1]);
+            if (option == 1) {
+                break;
+            }
+            char[] password = pass.getPassword();
+            char[] passwordC = passConfirmar.getPassword();
+            s = new String(password);
+            sC = new String(passwordC);
+
+            if (!s.equals(sC)) {
+                JOptionPane.showMessageDialog(null, "Senha incorreta.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else {
+                break;
+            }
+            pass.setText("");
+            passConfirmar.setText("");
+        } while (true);
+        if (option == 1) {
+            return "";
+        }
+        return sC;
+    }
+
+    private void novoUsuario() {
+        String nome, login;
+
+        nome = JOptionPane.showInputDialog("Nome");
+        if (nome == null) {
+            return;
+        }
+
+        login = JOptionPane.showInputDialog("Login");
+        if (login == null) {
+            return;
+        }
+
+        String s = criarSenha();
+        if (!s.isEmpty()) {
+            modelUsuario.setUsuNome(nome);
+            modelUsuario.setUsuLogin(login);
+            modelUsuario.setUsuSenha(s);
+            if (controllerUsuario.salvarUsuarioController(modelUsuario) > 0) {
+                atualizarTabela();
+                JOptionPane.showMessageDialog(this, "Cadastro Realizado!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao tentar Cadastrar Usuario.");
+            }
+        }
+
+    }
+
+    private void excluirUsuario() {
+        int linha = jTable1.getSelectedRow();
+        if (linha != -1) {
+            ModelUsuario usu = controllerUsuario.getUsuarioController((int) jTable1.getValueAt(linha, 0));
+            if (usu != null) {
+                modelUsuario = usu;
+                if (verificaSenha()) {
+                    String[] options = new String[]{"Confirmar", "Cancelar"};
+                    if (JOptionPane.showOptionDialog(null, "Cofirmar exclusão", "Excluir", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]) == 0) {
+                        if (controllerUsuario.excluirUsuarioController(usu.getIdUsuario())) {
+                            atualizarTabela();
+                            JOptionPane.showMessageDialog(this, "Excluido com sucesso.");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Usuario não excluido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao acessar o banco", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Selecione um produto", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Selecione um usuario", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void pesquisarProduto() {
+    private void alterarUsuario() {
+        int linha = jTable1.getSelectedRow();
+        if (linha != -1) {
+            ModelUsuario usu = controllerUsuario.getUsuarioController((int) jTable1.getValueAt(linha, 0));
+            if (usu != null) {
+                modelUsuario = usu;
+                if (verificaSenha()) {
+                    String nome = JOptionPane.showInputDialog("Novo Nome");
+                    if (nome == null) {
+                        return;
+                    }
+                    String login = JOptionPane.showInputDialog("Novo Login");
+                    if (login == null) {
+                        return;
+                    }
+                    String senha = criarSenha();
+                    usu.setUsuSenha(senha);
+                    usu.setUsuNome(nome);
+                    usu.setUsuLogin(login);
+                    if (!senha.isEmpty()) {
+                        if (controllerUsuario.atualizarUsuarioController(modelUsuario)) {
+                            atualizarTabela();
+                            JOptionPane.showMessageDialog(this, "Alterado com sucesso.");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Usuario não excluido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao acessar o banco", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um usuario", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void pesquisarUsuario() {
         String entrada = jtf_Pesquisar.getText();
         if (!"".equals(entrada)) {
             DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
             modelo.setNumRows(0);
 
-            listaModelProduto.forEach((p) -> {
+            listaModelUsuario.forEach((p) -> {
                 String auxiliar;
-                if (entrada.length() <= p.getProNome().length()) {
-                    auxiliar = p.getProNome().substring(0, entrada.length());
+                if (entrada.length() <= p.getUsuNome().length()) {
+                    auxiliar = p.getUsuNome().substring(0, entrada.length());
                     if (entrada.equals(auxiliar)) {
                         modelo.addRow(new Object[]{
-                            p.getIdProduto(),
-                            p.getProNome(),
-                            p.getProValor(),
-                            p.getProEstoque()
+                            p.getIdUsuario(),
+                            p.getUsuNome(),
+                            p.getUsuLogin(),
                         });
                     }
                 }
@@ -222,7 +256,6 @@ public class ViewProduto extends javax.swing.JFrame {
         jb_Alterar = new javax.swing.JButton();
         jb_Novo = new javax.swing.JButton();
         jtf_Pesquisar = new javax.swing.JTextField();
-        jb_Ver = new javax.swing.JButton();
         jb_Todos = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -233,20 +266,20 @@ public class ViewProduto extends javax.swing.JFrame {
         jTable1.setForeground(new java.awt.Color(204, 0, 0));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Código", "Nome", "Valor", "Quantidade"
+                "Código", "Nome", "Login"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -259,8 +292,7 @@ public class ViewProduto extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(50);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(120);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(15);
         }
 
         jb_Pesquisar.setBackground(new java.awt.Color(0, 0, 0));
@@ -311,16 +343,6 @@ public class ViewProduto extends javax.swing.JFrame {
             }
         });
 
-        jb_Ver.setBackground(new java.awt.Color(0, 0, 0));
-        jb_Ver.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        jb_Ver.setForeground(new java.awt.Color(240, 240, 240));
-        jb_Ver.setText("Ver");
-        jb_Ver.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jb_VerActionPerformed(evt);
-            }
-        });
-
         jb_Todos.setBackground(new java.awt.Color(0, 0, 0));
         jb_Todos.setForeground(new java.awt.Color(255, 255, 255));
         jb_Todos.setText("Todos");
@@ -330,7 +352,7 @@ public class ViewProduto extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/produtos_.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/cliente_111x111.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -339,7 +361,7 @@ public class ViewProduto extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(22, Short.MAX_VALUE)
+                        .addGap(22, 22, 22)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -348,13 +370,12 @@ public class ViewProduto extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jb_Todos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jb_Pesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(18, 18, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jb_Novo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jb_Alterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jb_Excluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jb_Alterar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jb_Ver, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jb_Voltar)))
@@ -372,15 +393,13 @@ public class ViewProduto extends javax.swing.JFrame {
                             .addComponent(jb_Pesquisar)
                             .addComponent(jtf_Pesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jb_Novo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jb_Novo, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jb_Excluir, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jb_Excluir, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jb_Alterar, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jb_Ver, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jb_Todos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -402,20 +421,11 @@ public class ViewProduto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jb_VerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_VerActionPerformed
-        // TODO add your handling code here:
-        detalhesProduto();
-    }//GEN-LAST:event_jb_VerActionPerformed
 
     private void jb_PesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_PesquisarActionPerformed
         // TODO add your handling code here:
-        pesquisarProduto();
+        pesquisarUsuario();
     }//GEN-LAST:event_jb_PesquisarActionPerformed
-
-    private void jb_TodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_TodosActionPerformed
-        // TODO add your handling code here:
-        atualizarTabela();
-    }//GEN-LAST:event_jb_TodosActionPerformed
 
     private void jb_VoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_VoltarActionPerformed
         // TODO add your handling code here:
@@ -423,20 +433,25 @@ public class ViewProduto extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jb_VoltarActionPerformed
 
-    private void jb_AlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_AlterarActionPerformed
-        // TODO add your handling code here:
-        alterarProduto();
-    }//GEN-LAST:event_jb_AlterarActionPerformed
-
     private void jb_ExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_ExcluirActionPerformed
         // TODO add your handling code here:
-        excluirProduto();
+        excluirUsuario();
     }//GEN-LAST:event_jb_ExcluirActionPerformed
+
+    private void jb_AlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_AlterarActionPerformed
+        // TODO add your handling code here:
+        alterarUsuario();
+    }//GEN-LAST:event_jb_AlterarActionPerformed
 
     private void jb_NovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_NovoActionPerformed
         // TODO add your handling code here:
-        novoProduto();
+        novoUsuario();
     }//GEN-LAST:event_jb_NovoActionPerformed
+
+    private void jb_TodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_TodosActionPerformed
+        // TODO add your handling code here:
+        atualizarTabela();
+    }//GEN-LAST:event_jb_TodosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -455,21 +470,20 @@ public class ViewProduto extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewProduto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewProduto().setVisible(true);
+                new ViewUsuario().setVisible(true);
             }
         });
     }
@@ -484,7 +498,6 @@ public class ViewProduto extends javax.swing.JFrame {
     private javax.swing.JButton jb_Novo;
     private javax.swing.JButton jb_Pesquisar;
     private javax.swing.JButton jb_Todos;
-    private javax.swing.JButton jb_Ver;
     private javax.swing.JButton jb_Voltar;
     private javax.swing.JTextField jtf_Pesquisar;
     // End of variables declaration//GEN-END:variables
